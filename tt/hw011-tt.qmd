@@ -1,0 +1,122 @@
+---
+author: "Mary Agou"
+title: "Homework 01"
+---
+
+
+## TidyTuesday Part
+
+Explore the week's [TidyTuesday](https://github.com/rfordatascience/tidytuesday) challenge. Develop a research question, then answer it through a short data story mainly composed of [effective visualizations](https://docs.google.com/presentation/d/1WHr6Itzm2IJLxvppcacxHpr8R4NxO4MfvWWUPmtQx6Q/preview?slide=id.g13360dab5d5_0_61).  Provide sufficient background for readers to grasp your narrative.  Refer to the Homework Instructions ⭐ page on the course website for details on how to submit this part.
+```{r}
+library(tidyverse)
+cafe <-read.csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-09-08/cafe.csv')
+cappuccino_index =read.csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-09-08/cappuccino_index.csv')
+coffee_data<-cappuccino_index|>
+  inner_join(cafe,join_by(country))
+```
+```{r}
+str(cafe)
+```
+# a graph of hourly wage in british pounds
+```{r}
+cafe|>
+  ggplot(aes(x=hourly_wage_gbp))+
+  geom_histogram()
+```
+#a graph of price of coffee  in british pounds
+```{r}
+cafe|>
+  ggplot(aes(x=price_gbp))+
+  geom_histogram()
+
+```
+
+  
+
+# a graph of the number of  cafes
+```{r}
+cappuccino_index|>
+  ggplot(aes(x=n))+
+  geom_bar()
+```
+# a graph of cafe shops  against the country
+```{r}
+cappuccino_index |>
+  ggplot(aes(x = n, y = reorder(country, n))) +
+  geom_col() +
+  labs(
+    x = "Number of cafes",
+    y = "Country"
+  )
+  
+
+```
+
+#notes
+USA has the highest number of cafes in most cities.Does that have an impact on the price of a cup of cappucino?
+```{r}
+coffee_data|>
+  group_by(country)|>
+  filter(country=="USA")
+```
+```{r}
+coffee_data|>
+  filter(country=="USA")|>
+  arrange(desc(urban))|>
+  head()
+ 
+```
+
+
+
+```{r}
+library(tidyverse)
+coffee_data |>
+  ggplot(aes(x = hourly_wage_gbp, y = price_gbp)) +
+  geom_point() +
+  geom_point()+
+  geom_smooth(method = "lm")+
+  geom_point(data = coffee_data|>filter(country=="USA"),aes(colour = "USA"),size=2)+
+  geom_text(data = coffee_data|>filter(country=="USA"),
+            aes(label=country),size=2.0,colour="blue")+
+  labs(
+    x = "Hourly wage in British pounds",
+    y = "Coffee price British pounds",
+    title = " The Cappucino Index",
+    subtitle="Coffee prices tend to Increase as Hourly wages increase",
+    alt="A graph of hourly wage against the price_gbp in british pounds",
+   caption = "Source: [Week 1 TIdyTuesday] | Author: Apiu Kur | Created on: September 8, 2026",
+   colour="country"
+  )+
+  theme( 
+        plot.title =element_text(hjust=0.5) ,
+        plot.subtitle = element_text(hjust=0.5),
+        legend.position = "right"
+  
+        )
+
+
+```
+```{r}
+coffee_data|>
+  filter(country=="USA")|>
+  ggplot(aes(x=hourly_wage_gbp))+
+    geom_histogram()
+```
+
+
+Background
+-The coffee_data is a data set formed from joining two data sets coffee data and cappucino index.The coffee data consists  variable such as coffee prices,wages,countries,hourly wage,whether the cafes are in urban or not.
+-The Capuccino index on the other hand is a data set that contains the country and how long it would take a person to work in a cafe to obtain a cup of cappucino.
+
+-Based on the visualisations  above The United States seems to have  the largest number of coffee shops hence my interest in what factors contribute to the price of coffee in the United States
+**Research question**
+#What factors are associated with the price of coffee in the United States?
+There appears to be a positive linear relationship between hourly wage and coffee price in the United States. This suggests that places with higher hourly wages tend to have higher coffee prices.
+-The United States has a large number of cafés in the dataset.
+Hourly wages in the United States are relatively high, with the hourly wage in most cities being above £9.
+-The data also includes a large number of cafés across urban, suburban, and rural areas. Some cities have at least 600 cafés in the dataset.
+
+-These visualizations suggest that hourly wage and the number of cafés may be important factors to consider when looking at coffee prices in the United States which is relatively cheap in comparison to to other countries. In particular, the positive relationship between hourly wage and coffee price suggests that coffee prices tend to be higher in places where hourly wages are higher.
+
+
