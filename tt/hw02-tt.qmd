@@ -1,0 +1,160 @@
+---
+title: "Homework 02"
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+## TidyTuesday Part (Optional)
+
+::: {.callout-important title="Instructions"}
+You can count work on this week's TidyTuesday toward the exceptional
+work.
+:::
+
+Explore the week's
+[TidyTuesday](https://github.com/rfordatascience/tidytuesday) challenge.
+Develop a research question, then answer it through a short data story
+mainly composed of [effective
+visualizations](https://docs.google.com/presentation/d/1WHr6Itzm2IJLxvppcacxHpr8R4NxO4MfvWWUPmtQx6Q/preview?slide=id.g13360dab5d5_0_61).
+Provide sufficient background for readers to grasp your narrative. Refer
+to the Homework Instructions ⭐ page on the course website for details
+on how to submit this part.
+
+```{r}
+dead_scrolls<-read.csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-09-15/dead_sea_scrolls.csv')
+```
+
+**Background** The dead_scrolls dataset was curated by Tony Galvan of
+Golden Dome Data Science using information from the Israel Antiquities
+Authority's official Leon Levy Dead Sea Scrolls Digital Library. The
+dataset contains information about the Dead Sea Scrolls discovered near
+the Dead Sea. It includes variables such as the manuscript ID, the cave
+where the manuscript was found, the material it was made from, the
+discovery site, and the parent site.
+
+I will use these variables to explore the types of texts found at
+different sites and consider what these texts may suggest about the
+beliefs and practices of the communities associated with those
+locations.
+
+```{r}
+#library(tidyverse)
+#dead_scrolls|>
+#  ggplot(aes(y=num_images,x=site_parent,colour  = biblical_book))+
+ # geom_point()+
+  #labs(title = "A graph of the number of images",subtitle = "Number of high resolution images for the manuscript")
+  
+```
+
+```{r}
+dead_scrolls|>
+  filter(composition!="Unidentified")|>
+  group_by(composition)|>
+  ggplot(aes(x=composition))+
+  geom_bar()+
+  labs(title = "composition or biblical book identified ")
+```
+
+```{r}
+dead_scrolls|>
+filter(composition!="Unidentified")|>
+  group_by(site)
+
+
+
+```
+
+```{r}
+dead_scrolls|>
+  ggplot(aes(x=language))+
+  geom_bar()+
+  labs(title = "language of manuscript ")
+```
+
+```{r}
+dead_scrolls|>
+  group_by(site_parent)|>
+  ggplot(aes(x=site))+
+  geom_boxplot()+
+  labs(title = "full discovery site description ")
+
+```
+
+```{r}
+dead_scrolls|>
+  ggplot(aes(x=biblical_book))+
+  geom_bar()+
+  labs(title = "Identified Biblical book")
+```
+
+```{r}
+dead_scrolls|>
+  filter(!bible_section=="Unidentified")|>
+  ggplot(aes(x=bible_section))+
+  geom_bar()+
+  labs(title = "bible section")
+```
+
+**question** What can the distribution of manuscripts found at different
+sites tell us about the types of texts associated with the beliefs of
+the commnunites around there?
+
+```{r}
+dead_scrolls |>
+  filter(content_category != "Unidentified") |>
+  ggplot(aes(x = site_parent, fill = content_category)) +
+  geom_bar() +
+  geom_text(stat = "count",
+    aes(label = after_stat(count)),
+    position = position_stack(vjust = 0.5))+
+  labs(
+    title = "Types of Texts Found Across Dead Sea Scrolls Sites",
+    subtitle = "The Scarcity of Biblical Texts Suggests Broader Religious Traditions",
+    x = "Discovery Site",
+    y = "Number of Manuscripts",
+    fill = "Content Category",
+    caption = "Source: Week 2 TidyTuesday, Created on:09/20/26 by :Apiu Kur",
+    alt = "A bar chart showing the number of manuscripts in different content categories at each Dead Sea Scrolls discovery site. The x-axis shows discovery sites and the y-axis shows the number of manuscripts. Different colors represent content categories."
+  )
+```
+
+```{r}
+dead_scrolls|>
+  ggplot(aes(x=num_images,y=site_parent,colour = content_category))+
+  geom_point()+
+  facet_wrap(~testament)
+```
+
+_The Quamran communities contains the highest number of images taken to
+locate the specific manuscript _Qumran has a variety of the category of
+the books associated to them varying from Biblical,documentary,wisdom.
+-Masada had the wisdom literature. -Wadi Murabbat had a mix of
+biblical,Parabiblical -Nahal Hever had Biblical Liturgical -Masada
+mostly Biblical.
+
+```{r}
+dead_scrolls|>
+  ggplot(aes(x=num_images,y=site_parent,colour = testament))+
+  geom_point()
+```
+
+#observations
+Qumran has a large number of manuscripts and contains a
+wide variety of text types. Many of the manuscripts found at Qumran are
+non-biblical, but the site also contains manuscripts of Old Testament
+texts. Masada also contains mostly non-biblical manuscripts. Across the
+sites, non-biblical texts make up a large part of the manuscripts,
+although the types of texts vary between locations.
+
+The manuscripts found at different Dead Sea Scrolls sites provide clues
+about the kinds of texts that were important to the communities
+associated with those locations. Qumran stands out because it contains a
+large and diverse collection of manuscripts, including both biblical and
+non-biblical texts. The presence of Old Testament texts alongside other
+types of writings suggests that the community engaged with biblical
+traditions while also reading and producing other kinds of texts.
+
+The large number of non-biblical manuscripts could mean that the
+communities had a broader range of beliefs, practices, laws, wisdom, and
+other ideas that were important to the communities.
