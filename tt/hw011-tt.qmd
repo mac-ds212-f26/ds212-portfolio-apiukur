@@ -35,19 +35,19 @@ cafe|>
 
 # a graph of the number of  cafes
 ```{r}
-cappuccino_index|>
-  ggplot(aes(x=n))+
-  geom_bar()
+#cappuccino_index|>
+  #ggplot(aes(x=n))+
+  #geom_bar()
 ```
 # a graph of cafe shops  against the country
 ```{r}
-cappuccino_index |>
-  ggplot(aes(x = n, y = reorder(country, n))) +
-  geom_col() +
-  labs(
-    x = "Number of cafes",
-    y = "Country"
-  )
+#cappuccino_index |>
+ # ggplot(aes(x = n, y = reorder(country, n))) +
+  #geom_col() +
+#  labs(
+ #   x = "Number of cafes",
+   # y = "Country"
+  #)
   
 
 ```
@@ -77,24 +77,23 @@ coffee_data |>
   geom_point()+
   geom_smooth(method = "lm")+
   geom_point(data = coffee_data|>filter(country=="USA"),aes(colour = "USA"),size=2)+
-  geom_text(data = coffee_data|>filter(country=="USA"),
-            aes(label=country),size=2.0,colour="blue")+
   labs(
     x = "Hourly wage in British pounds",
     y = "Coffee price British pounds",
-    title = " The Cappucino Index",
+    title = " The Cappuccino Index: USA vs. Other Countries",
     subtitle="Coffee prices tend to Increase as Hourly wages increase",
     alt="A graph of hourly wage against the price_gbp in british pounds",
    caption = "Source: [Week 1 TIdyTuesday] | Author: Apiu Kur | Created on: September 8, 2026",
    colour="country"
   )+
   theme( 
-        plot.title =element_text(hjust=0.5) ,
-        plot.subtitle = element_text(hjust=0.5),
-        legend.position = "right"
+        plot.title =element_text(hjust=0.5,face = "bold") ,
+        plot.subtitle = element_text(hjust=0.5,color = rgb(0,0,0,alpha = 0.6)),
+        legend.position = "right",
+        plot.caption =element_text(color = rgb(0, 0, 0, alpha = 0.4))
+        
   
         )
-
 
 ```
 ```{r}
