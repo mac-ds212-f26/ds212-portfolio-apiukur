@@ -1,0 +1,90 @@
+---
+title: "Homework 07"
+---
+
+
+## TidyTuesday Part (Optional)
+
+::: {.callout-important title="Instructions"}
+You can count work on this week's TidyTuesday toward the exceptional work.
+:::
+
+Explore the week's [TidyTuesday](https://github.com/rfordatascience/tidytuesday) challenge. Develop a research question, then answer it through a short data story mainly composed of [effective visualizations](https://docs.google.com/presentation/d/1Q-C0sFxYGQvkxb6PU6OM_YOv6Nilalpk-IWb362PoRc/preview?slide=id.g13360dab5d5_0_61#slide=id.g13360dab5d5_0_61).  Provide sufficient background for readers to grasp your narrative.  Refer to the Homework Instructions ⭐ page on the course website for details on how to submit this part.
+```{r}
+grambank_languages <- read.csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-11-03/grambank_languages.csv")
+```
+
+#How similar are languages structurally across families and macro-regions?
+
+```{r}
+library(tidyverse)
+family_names<-grambank_languages|>
+filter(!is.na(longitude),!is.na(latitude),!is.na(family_name))|>
+  group_by(family_name)|>
+  count()|>
+  summarise(total_families=sum(n))|>
+ arrange(desc(total_families))|>
+  slice_head(n=15)
+family_names
+
+data<-grambank_languages|>
+  semi_join(family_names,by="family_name")|>
+  count(family_name,macroarea)|>
+  arrange(desc(n))|>
+slice_head(n=15)
+  
+data
+ 
+  
+
+
+ 
+```
+
+```{r}
+data |>
+  ggplot(aes(
+    x = n,
+    y = reorder(family_name, n),
+    fill = macroarea
+  )) +
+  geom_col(
+    width = 0.75,
+    color = "white",
+    linewidth = 0.2
+  ) +
+  labs(
+    x = "Number of languages",
+    y = "Language family",
+    fill = "Geographical region",
+    title = "How Are Language Families Distributed Across Regions?",
+    subtitle = "Comparing the number of languages across macroareas",
+    caption = "TidyTuesday | Week 11 | Author: Apiu | November 13, 2026"
+  ) +
+  #adds more colors 
+  scale_fill_brewer(palette = "Set2") +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = "bold", size = 16),
+    plot.subtitle = element_text(size = 11, color = "grey40"),
+    axis.title = element_text(face = "bold"),
+    axis.text.y = element_text(size = 10),
+    legend.position = "top",
+    legend.title = element_text(face = "bold"),
+    panel.grid.major.y = element_blank(),
+    plot.caption = element_text(color = "grey50", size = 9)
+  )
+ 
+
+
+```
+Research Question
+#How similar are languages structurally across families and macro-regions?
+
+The visualization above uses data from the Grambank dataset, which explores the grammatical structures of more than 2,400 languages worldwide. Using a geom_col() chart, the visualization explores how languages differ across language families and geographical regions, including Africa, North America, South America, and other continents. It highlights the distribution of language families across different regions and helps us understand the grammatical diversity of languages around the world.
+
+
+
+
+
+

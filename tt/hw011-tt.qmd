@@ -1,0 +1,120 @@
+---
+author: "Mary Agou"
+title: "Homework 01"
+---
+
+
+## TidyTuesday Part
+
+Explore the week's [TidyTuesday](https://github.com/rfordatascience/tidytuesday) challenge. Develop a research question, then answer it through a short data story mainly composed of [effective visualizations](https://docs.google.com/presentation/d/1WHr6Itzm2IJLxvppcacxHpr8R4NxO4MfvWWUPmtQx6Q/preview?slide=id.g13360dab5d5_0_61).  Provide sufficient background for readers to grasp your narrative.  Refer to the Homework Instructions ⭐ page on the course website for details on how to submit this part.
+```{r}
+library(tidyverse)
+cafe <-read.csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-09-08/cafe.csv')
+cappuccino_index =read.csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-09-08/cappuccino_index.csv')
+coffee_data<-cappuccino_index|>
+  inner_join(cafe,join_by(country))
+```
+```{r}
+str(cafe)
+```
+#notes
+USA has the highest number of cafes in most cities.Does that have an impact on the price of a cup of cappucino?
+```{r}
+coffee_data|>
+  group_by(country)|>
+  filter(country=="USA")
+```
+
+```{r}
+#price vs hourly wage for USA
+USA_coffee_data<-coffee_data|>
+  filter(country=="USA")
+#USA_coffee_data|>
+ # ggplot(aes(x=hourly_wage_gbp,y=price_gbp))+
+#  geom_point()+
+  #geom_smooth(method = "lm")
+
+
+  
+```
+
+```{r}
+USA_complete <- USA_coffee_data |>
+  select(price_gbp, hourly_wage, city) |>
+  drop_na()
+```
+
+
+```{r}
+library(tidyverse)
+West_Richland<-USA_complete|>
+filter(city=="West Richland")
+#graph1
+#price vs hourly wage for USA
+USA_coffee_data<-coffee_data|>
+  filter(country=="USA")
+USA_coffee_data|>
+  ggplot(aes(x=hourly_wage_gbp,y=price_gbp))+
+  geom_point()+
+  geom_smooth(method = "lm")
+
+#graph3
+#graph for all the countries
+coffee_data|>
+  ggplot(aes(x=hourly_wage_gbp,y=price_gbp))+
+  geom_point()+
+  geom_smooth(method = "lm")
+
+#graph2
+ggplot(USA_complete,
+       aes(x = hourly_wage, y = price_gbp)) +
+  geom_point(alpha = 0.5, color = "steelblue") +
+  geom_point(data =West_Richland,colour = "green")+
+  geom_text(data = West_Richland,label = "West_Richland",size = 3,vjust = 1.9)+
+  geom_smooth(method = "lm", se = FALSE, color = "darkred") +
+  labs(
+    title = "The cappuccino_index Index of coffee in USA",
+    subtitle = "Higher coffee prices are weakly associated with higher wages,with West Richland standing out for its  high price",
+    x = "Hourly wage ",
+    y = "Cappuccino price ",
+    alt="A graph of hourly wage against the price_gbp in british pounds",
+    caption = "Source: Week2 TidyTuesday|created by Apiu|Date:10/09/26"
+  ) +
+  scale_x_continuous(labels = scales::label_dollar(prefix = "£"))+
+  scale_y_continuous(labels = scales::label_dollar(prefix = "£"))+
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = "bold"),
+    panel.grid.minor = element_blank(),
+    plot.subtitle = element_text(size = 9),
+    plot.caption = element_text(hjust = -0.1,size = 6)
+    
+  )
+
+```
+
+
+
+>In the US the price of coffee when the hourly wage is zero is approximately 3.3 dollars.
+>The coffee price in the US is 3.3 dollars when hourly wage is zero dollars
+>Only 4.5 variability of coffee price is expalined by the hourly wage In the USA.
+>Other factors have an impact on the price of coffee.
+>There is a very weak realtionship between hourly wage and the price of coffee.
+
+
+
+Background
+-The coffee_data is a data set formed from joining two data sets coffee data and cappucino index.The coffee data consists  variable such as coffee prices,wages,countries,hourly wage,whether the cafes are in urban or not.
+-The Capuccino index on the other hand is a data set that contains the country and how long it would take a person to work in a cafe to obtain a cup of cappucino.
+-Based on the visualisations  above The United States seems to have  the largest number of coffee shops hence my interest in what impact does the hourly wages have on coffee prices in the USA.
+
+**Research question**
+
+#How are the coffee prices associated with the hourly wage in the Unites States
+There appears to be a weak  positive linear relationship between the price to get a cup of coffee in the united states and the hourly wage suggesting that there are other possible factors affecting this relationship that could be location. 
+
+There appears to be a weak positive linear relationship between hourly wages and coffee prices in the United States. This suggests that places with higher hourly wages tend to have slightly higher coffee prices. However, hourly wage alone explains only about 4.41% of the variation in coffee prices. Other factors, such as location, may also help explain differences in coffee prices
+
+
+
+

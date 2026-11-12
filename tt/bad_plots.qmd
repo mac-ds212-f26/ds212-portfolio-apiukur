@@ -1,0 +1,26 @@
+---
+title: "bad_plots"
+format: html
+---
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(gridExtra)
+library(ggthemes)
+```
+
+```{r}
+library(faraway)
+data(nepali)
+data(worldcup)
+```
+
+```{r}
+library(dlnm)
+data(chicagoNMMAPS)
+chic <- chicagoNMMAPS
+chic_july <- chic %>%
+  filter(month == 7 & year == 1995)
+```
+
