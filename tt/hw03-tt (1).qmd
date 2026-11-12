@@ -1,0 +1,70 @@
+---
+title: "Homework 03"
+---
+
+
+## TidyTuesday Part (Optional)
+
+::: {.callout-important title="Instructions"}
+You can count work on this week's TidyTuesday toward the exceptional work.
+:::
+
+Explore the week's [TidyTuesday](https://github.com/rfordatascience/tidytuesday) challenge. Develop a research question, then answer it through a short data story mainly composed of [effective visualizations](https://docs.google.com/presentation/d/1WHr6Itzm2IJLxvppcacxHpr8R4NxO4MfvWWUPmtQx6Q/preview?slide=id.g13360dab5d5_0_61).  Provide sufficient background for readers to grasp your narrative.  Refer to the Homework Instructions ⭐ page on the course website for details on how to submit this part.
+```{r}
+urban <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-09-22/urban.csv")
+
+```
+
+**Background**
+>This Data obtained from the UN habitat curated by Gabriela Panomo Munoz is exploring the average share of green areas in cities and urban areas and green area per capita around the world.Within each city/urban area is extracted using satelite imagery analysis for the five time periods 1990,2000,2010,2020 and 2025 based on the Normalized Difference Vegetation Index (NDVI), which assesses the level of greenness from satellite imagery.green areas are defined as parts of the city that are green for most parts of the year, and include individual trees, forests or forested areas, shrubs, perennial grasses and such other types of long-term vegetation.The variables include country,citycode,cityname,data source,greenarea per capital.
+
+**The count of average green share in percentagel**
+```{r}
+urban|>
+  ggplot(aes(x=averageShareOfGreenAreaInCityUrbanAreaPct))+
+  geom_histogram()
+```
+
+```{r}
+urban|>
+  ggplot(aes(x=greenAreaPerCapitaM2))+
+  geom_histogram()
+```
+```{r}
+library(tidyverse)
+urban|>
+  ggplot(aes(x=year))+
+  geom_histogram()
+```
+```{r}
+urban|>
+  ggplot(aes(x=sdgRegion))+
+  geom_bar()
+```
+```{r}
+urban|>
+  ggplot(aes(x=sdgSubRegion))+
+  geom_bar()
+```
+```{r}
+urban |>
+  slice_max(
+    order_by = averageShareOfGreenAreaInCityUrbanAreaPct,
+    n = 30
+  ) |>
+  ggplot(
+    aes(
+      x = averageShareOfGreenAreaInCityUrbanAreaPct,
+      y = fct_reorder(cityName,averageShareOfGreenAreaInCityUrbanAreaPct))
+    )+
+   
+  geom_point()
+
+
+
+
+ 
+```
+
+
+

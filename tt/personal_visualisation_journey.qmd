@@ -1,0 +1,123 @@
+---
+title: "personal_visualisation_journey"
+format: html
+---
+
+```{r}
+library(tidyverse)
+personal_data<-read.csv("~/Downloads/Mary_Agou_personal_visualisation_journey.csv")
+```
+
+```{r}
+cleaned_data<-personal_data|>
+  mutate(category=recode(category,"Shopping / services"="Shopping"))|>
+  mutate(category=recode(category,"Transfer / person-to-person payment"="money transfer"))|>
+   mutate(category=recode(category,"Uncategorized purchase"="Shopping"))|>
+  mutate(category=recode(category,"Remittance / money transfer"="money transfer"))|>
+   mutate(category=recode(category,"Pharmacy / health"="pharmacy"))|>
+   mutate(category=recode(category,"Credit card payment"="Credit payment"))|>
+  mutate(category=recode(category,"Transfer / cash management"="savings"))|>
+  mutate(category=recode(category,"Government / services"="g services"))|>
+  mutate(amount_usd=abs(amount_usd))|>
+  
+  mutate(category=recode(category,"Food / dining"="food"))|>
+  mutate(category=recode(category,"Donation / organization (verify)"="donations"))|>
+  filter(category!="Account transfer")|>
+  mutate(date=as.Date(date))
+  
+cleaned_data
+
+ 
+```
+
+```{r}
+cleaned_data|>
+  group_by(category)|>
+  ggplot(aes(x=category,y=amount_usd))+
+  geom_boxplot()
+```
+
+
+
+
+```{r}
+
+cleaned_data|>
+  ggplot(aes(x=date,y=amount_usd,colour = category))+
+  geom_line()+
+  scale_colour_hue()
+
+```
+
+```{r}
+cleaned_data|>
+  ggplot(aes(x=date,y=amount_usd,colour = category))+
+  geom_point()+
+  scale_y_continuous(limits = c(0,100))+
+  scale_colour_manual(values = c(
+  "red", "blue", "green", "orange", "purple",
+  "brown", "pink", "cyan", "gold"
+))
+
+```
+
+```{r}
+cleaned_data |>
+  ggplot(aes(x = date, y = amount_usd, colour = category)) +
+  geom_point(size = 3, alpha = 0.8) +
+
+  # Y-axis
+  scale_y_continuous(
+    limits = c(0, 100),
+    breaks = seq(0, 100, by = 10),
+    #the scales helps to add the labels for dollars
+    labels = scales::dollar
+  ) +
+
+  # Colours
+  scale_colour_manual(values = c(
+    "red", "blue", "green", "orange", "purple",
+    "brown", "pink", "cyan", "gold"
+  )) +
+
+  # Titles and labels
+  labs(
+    title = "My Financial Transactions Over Time for a Month",
+    subtitle = "Money transfers account for the largest share of my total spending.",
+    x = "Transaction Date",
+    y = "Transaction Amount ",
+    colour = "Transaction Category",
+    caption = "Source: transaction records, Createdby: Mary Agou, Created on:November 4th 2026."
+  ) +
+
+  # Theme
+  theme_minimal() +
+
+  theme(
+    plot.title = element_text(
+      size = 16, face = "bold"
+    ),
+    plot.subtitle = element_text(
+      size = 11, colour = "gray40"
+    ),
+    axis.title = element_text(
+      size = 11, face = "bold"
+    ),
+    axis.text = element_text(size = 10),
+    legend.title = element_text(face = "bold"),
+    legend.position = "right",
+    panel.grid.minor = element_blank(),
+    plot.caption = element_text(
+      size = 9, colour = "gray40",hjust = 0.5
+    )
+  )
+```
+
+
+
+
+
+
+introducing the difference in the size of the pockets in men and women pockets.
+measured the size of the mens and womens size in the us and identified the pockects are indeed smaller in length and width.
+they also added to reasob behind the reason why women pockets are smaller than men from the past and checked 

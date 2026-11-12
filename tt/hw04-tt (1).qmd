@@ -1,0 +1,42 @@
+---
+title: "Homework 04"
+---
+
+
+## TidyTuesday Part (Optional)
+
+::: {.callout-important title="Instructions"}
+You can count work on this week's TidyTuesday toward the exceptional work.
+:::
+
+Explore the week's [TidyTuesday](https://github.com/rfordatascience/tidytuesday) challenge. Develop a research question, then answer it through a short data story mainly composed of [effective visualizations](https://docs.google.com/presentation/d/1Q-C0sFxYGQvkxb6PU6OM_YOv6Nilalpk-IWb362PoRc/preview?slide=id.g13360dab5d5_0_61#slide=id.g13360dab5d5_0_61).  Provide sufficient background for readers to grasp your narrative.  Refer to the Homework Instructions ⭐ page on the course website for details on how to submit this part.
+
+```{r}
+avocado_oil_bottles = read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-10-06/avocado_oil_bottles.csv")
+avocado_oil_processed_foods = read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-10-06/avocado_oil_processed_foods.csv")
+```
+>Possible question;which food category/oil  had most misleading labels and from what region were they?
+
+Background
+
+The dataset comes from two UC Davis studies investigating avocado oil authenticity. The first study examined bottled avocado oils in 2020, while the second examined processed foods labeled as containing avocado or olive oil in 2026. The processed foods dataset includes chips, mayonnaise, and salad dressings, as well as information about declared oil types, product labels, purchase locations, and oil authenticity. Researchers used the chemical profiles of the oils to determine whether they were consistent with the declared oil type. The bottled oil dataset hereis being used to compare authenticity across food categories
+
+```{r}
+library(tidyverse)
+class(avocado_oil_processed_foods)
+avocado_oil_processed_foods|>
+  ggplot(aes(x=category,fill=authentic))+
+  geom_bar(position = "stack")+
+  labs(
+    subtitle = "Chips account for the highest number of unauthentic oil labels across purchase locations.",
+    title = "Avocado Oil Authenticity Levels in Food Categories",
+    caption =  "Week5 TidyTuesday|Created by:Apiu|Date:10/10/26"
+  )+
+  theme(
+    plot.title = element_text(size = 20),
+    plot.caption = element_text(hjust = -0.1,size = 8)
+  )
+  
+```
+Of all the food categories chips bought on retail has the highest number of unauthentic oil
+

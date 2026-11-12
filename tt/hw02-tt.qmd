@@ -39,7 +39,7 @@ beliefs and practices of the communities associated with those
 locations.
 
 ```{r}
-#library(tidyverse)
+library(tidyverse)
 #dead_scrolls|>
 #  ggplot(aes(y=num_images,x=site_parent,colour  = biblical_book))+
  # geom_point()+
@@ -101,6 +101,7 @@ sites tell us about the types of texts associated with the beliefs of
 the commnunites around there?
 
 ```{r}
+library(tidyverse)
 dead_scrolls |>
   filter(content_category != "Unidentified") |>
   ggplot(aes(x = site_parent, fill = content_category)) +
@@ -110,12 +111,17 @@ dead_scrolls |>
     position = position_stack(vjust = 0.5))+
   labs(
     title = "Types of Texts Found Across Dead Sea Scrolls Sites",
-    subtitle = "The Scarcity of Biblical Texts Suggests Broader Religious Traditions",
+    subtitle = "Biblical texts are less common than other manuscript categories across the discovery sites, suggesting a diverse range of religious traditions",
     x = "Discovery Site",
     y = "Number of Manuscripts",
     fill = "Content Category",
-    caption = "Source: Week 2 TidyTuesday, Created on:09/20/26 by :Apiu Kur",
+    caption = "Source: Week 2 TidyTuesday, Created on:09/20/26 by:Apiu Kur",
     alt = "A bar chart showing the number of manuscripts in different content categories at each Dead Sea Scrolls discovery site. The x-axis shows discovery sites and the y-axis shows the number of manuscripts. Different colors represent content categories."
+    +
+      theme(
+        plot.caption=element_text(size=3,color = "grey"),
+        plot.subtitle = element_text(size = 4)
+      )
   )
 ```
 
